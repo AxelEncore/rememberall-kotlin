@@ -136,8 +136,71 @@ class GameWorld{
         }
         println("${currentLocation.enemies.size + 1}. Отмена")
 
+        val choice = gameInput.getNumberInput("Ваш Выбор: ", 1, currentLocation.enemies.size + 1)
+
+        if (choice <= currentLocation.enemies.size){
+            val target = currentLocation.enemies[choice - 1]
+            player.attack(target)
+
+            // Удаление врага, если он умер
+            if (!target.isAlive){
+                currentLocation.enemies.remove(target)
+                println("${target.name} повержен и удален из локации!")
+            }
+
+            // Атака врагов в ответ (провокация)
+            currentLocation.enemies.forEach { enemy ->
+                if(enemy.isAlive){
+                    enemy.attack(player)
+                }
+            }
+        }
     }
 
+    private fun takeItemMenu(player: Player){
+        if (currentLocation.items.isEmpty()){
+            println("Здесь нет предметов для лутинга")
+            return
+        }
+
+        println("\n Выберите предмет для лутинга: ")
+
+        currentLocation.items.forEachIndexed { index, item ->
+            println("${index + 1}. ${item.name}")
+        }
+
+        val choice = gameInput.getNumberInput("Ваш выбор: ", 1, currentLocation.items.size)
+        val item = currentLocation.items[choice - 1]
+
+        println("Вы взяли: ${item.name}")
+        // Здесь в реальной игре надо положить предмет в инвентарь игрока
+
+        item.use(player)
+        currentLocation.items.remove(item)
+    }
+
+    private fun moveToNextLocation(){
+        if(currentLocationIndex < locations.size - 1){
+            currentLocationIndex++
+            println("Вы переместились на локацию: ${currentLocation.name}")
+
+            if (currentLocation.enemies.isNotEmpty()){
+                println("Вы слышите что-то жуткое")
+            }
+        }else{
+            println("Это последняя локация, дальше пути нет!!!!!!")
+        }
+    }
+}
+
+fun main(){
+    println("=== СОЗДАНИЕ ИГРОВОГО МИРА ===")
+
+    val gameWorld = GameWorld()
+    gameWorld.createWorld()
+
+    val player = Player("Иннокентий", 100, 15)
+    gameWorld.startGame(player)
 }
 
 
