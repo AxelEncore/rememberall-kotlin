@@ -135,7 +135,7 @@ class GameWorld{
             println("${index + 1}. ${enemy.name} (HP: ${enemy.health}")
         }
         println("${currentLocation.enemies.size + 1}. Отмена")
-        
+
     }
 
 }
