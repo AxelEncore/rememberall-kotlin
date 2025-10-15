@@ -175,7 +175,8 @@ class GameWorld{
         println("Вы взяли: ${item.name}")
         // Здесь в реальной игре надо положить предмет в инвентарь игрока
 
-        item.use(player)
+        // item.use(player)
+
         currentLocation.items.remove(item)
     }
 
